@@ -1,27 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-import { useAuth0 } from "@auth0/auth0-react";
 
 export default function Form(props) {
-  const { user, isAuthenticated, getAccessTokenSilently, loginWithRedirect } =
-    useAuth0();
-
-  const [accessToken, setAccessToken] = useState("");
-
-  const checkUser = async () => {
-    if (isAuthenticated) {
-      let token = await getAccessTokenSilently();
-      console.log(token);
-      setAccessToken(token);
-    } else {
-      loginWithRedirect();
-    }
-  };
-
-  useEffect(() => {
-    checkUser();
-  }, []);
-
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [colour, setColour] = useState("");
@@ -31,22 +11,14 @@ export default function Form(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let request = await axios.post(
-      "http://localhost:8080/fruit",
-      {
-        name,
-        description,
-        colour,
-        price,
-        stock,
-        image_url,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    let request = await axios.post("http://localhost:8080/fruit", {
+      name,
+      description,
+      colour,
+      price,
+      stock,
+      image_url,
+    });
     console.log(request);
   };
 
